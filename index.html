@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <title>对象邀请涵</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f8f9fa, #f0f2f5, #e9f0f5); 
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: sans-serif;
+            overflow: hidden;
+            padding-top: 40px;
+            position: relative;
+			
+			    min-height: 100vh; 
+			    box-sizing: border-box; 
+			    overflow: hidden; 
+        }
+
+        .gradient-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff7f7f, #ff4785, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+            white-space: nowrap;
+        }
+
+        .invitation-text {
+            font-size: 18px;
+            font-weight: 600;
+            background: linear-gradient(45deg, #8e44ad, #1abc9c, #8b5cf6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 20px;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(-10px);
+            animation: fadeInUp 0.8s ease-out 0.2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .redl {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #f1948a;
+            border-radius: 50%;
+            top: 58px;
+            left: 8px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .redr {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background: #f1948a;
+            border-radius: 50%;
+            top: 58px;
+            left: 87px;
+            overflow: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .face {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            background: #ffd966;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .eye {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            top: 30px;
+            overflow: hidden;
+        }
+
+        .eye.left {
+            left: 20px;
+        }
+
+        .eye.right {
+            right: 20px;
+        }
+
+        .pupil {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: black;
+            border-radius: 50%;
+            top: 9px;
+            left: 9px;
+            transition: all 0.05s linear;
+        }
+
+        .mouth {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 25px;
+            background: #a93226;
+            border-radius: 0 0 40px 40px;
+            transition: all 0.5s ease;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn.like {
+            background: #ff7f7f;
+            color: white;
+        }
+
+        .btn.like:hover {
+            transform: scale(1.08);
+            background: linear-gradient(45deg, #ff7f7f, #ff4785, #e64acf);
+            color: white;
+            font-size: 18px;
+            box-shadow: 0 4px 15px rgba(255, 111, 191, 0.3);
+            animation: buttonGlow 1.5s infinite alternate;
+        }
+
+        .btn.like::before {
+            content: "";
+            position: absolute;
+            left: -50%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-30deg);
+            opacity: 0.6;
+            pointer-events: none;
+            transition: transform 0.6s ease;
+        }
+
+        .btn.like:hover::before {
+            transform: skewX(30deg) translateX(150%);
+        }
+
+        @keyframes buttonGlow {
+            0% {
+                box-shadow: 0 0 10px rgba(255, 127, 127, 0.3);
+            }
+            100% {
+                box-shadow: 0 0 25px rgba(255, 71, 133, 0.6);
+            }
+        }
+
+        .btn.reject {
+            background: #dcdcdc;
+            color: #333;
+        }
+
+        .btn.reject:hover {
+            opacity: 0;
+        }
+
+        .mouse-glow {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 50% 50%, 
+                rgba(255, 127, 127, 0.3) 20%, 
+                rgba(255, 127, 127, 0.1) 80%);
+            border-radius: 50%;
+            pointer-events: none;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #ff7f7f;
+            border-radius: 50%;
+            opacity: 0.8;
+            filter: blur(1px);
+            pointer-events: none;
+            animation: particle-fade 1.5s linear infinite;
+        }
+
+        @keyframes particle-fade {
+            to {
+                opacity: 0;
+                transform: scale(2);
+            }
+        }
+
+        /* 新增背景效果 */
+        .star {
+            position: fixed;
+            width: 2px;
+            height: 2px;
+            background: #c7d2fe;
+            border-radius: 50%;
+            opacity: 0.8;
+            pointer-events: none;
+            animation: star-float 30s linear infinite;
+        }
+
+        @keyframes star-float {
+            0% { 
+                transform: translate3d(calc(-50% - var(--x, 0)), calc(-50% - var(--y, 0)), 0) scale(0.8); 
+                opacity: 0.8;
+            }
+            100% { 
+                transform: translate3d(calc(150% - var(--x, 0)), calc(150% - var(--y, 0)), 0) scale(1.2); 
+                opacity: 0.6;
+            }
+        }
+
+        .flow-light {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle at 40% 60%, #e9d5ff 30%, transparent 80%);
+            filter: blur(100px);
+            opacity: 0.5;
+            pointer-events: none;
+            animation: flow 15s linear infinite;
+        }
+
+        @keyframes flow {
+            0% { transform: rotate(0deg) translate(-300px, -150px); }
+            100% { transform: rotate(360deg) translate(300px, 150px); }
+        }
+
+        .wave {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 120px;
+            background: linear-gradient(to top, #e9f0f5 30%, transparent 100%);
+            filter: blur(30px);
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="gradient-title">
+        @枯木逢春向你发送了一封对象邀请
+    </div>
+    <div class="invitation-text">
+        希望你成为ta的对象，是否接受
+    </div>
+
+    <div class="face" id="face">
+        <div class="eye left"><div class="pupil" id="pupil-left"></div></div>
+        <div class="eye right"><div class="pupil" id="pupil-right"></div></div>
+        <div class="mouth" id="mouth"></div>
+        <div class="redl" id="redl"></div>
+        <div class="redr" id="redr"></div>
+    </div>
+
+    <div class="buttons">
+        <button class="btn like" id="like">🎁 牵手撒糖</button>
+        <button class="btn reject" id="reject">🎁 残忍拒绝</button>
+    </div>
+
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <!-- 引入SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // 按钮点击事件 - 替换为美化后的提示框
+        var likeButton = document.getElementById('like');
+        likeButton.addEventListener('click', function() {
+            document.body.style.backgroundColor = '#ffffff';
+            console.log('已将 body 背景颜色设置为白色');
+			Swal.fire({
+                title: '✨ 恭喜你，捕获了一颗真心！',
+                html: `
+                    <p style="line-height: 1.6; color:  #dc7633 ; font-size: 16px; text-align: center;">
+                        曾经以为“喜欢”是乍见之欢，<br>
+                        直到遇见了你，才明白“爱”是久处不厌。<br><br>
+                        谢谢你愿意收下我的偏爱与温柔，<br>
+                        未来的每一个清晨与黄昏，<br>
+                        让我成为你眼里最特别的风景吧～<br><br>
+                        「从此，有人问我粥可温，有人与我立黄昏」
+                    </p>
+                `,
+                showConfirmButton: false,
+                // timer: 4000,
+                background: 'linear-gradient(135deg,  #f5eef8 ,  #fadbd8 )',
+                color: '#ec7063',
+                customClass: {
+                    popup: 'rounded-lg shadow-2xl p-8',
+                    content: 'text-center'
+                }
+				
+            });
+        });
+
+        const face = document.getElementById('face');
+        const pupilLeft = document.getElementById('pupil-left');
+        const pupilRight = document.getElementById('pupil-right');
+        const mouth = document.getElementById('mouth');
+        const like = document.getElementById('like');
+        const reject = document.getElementById('reject');
+        const redl = document.getElementById('redl');
+        const redr = document.getElementById('redr');
+
+        function getCenter(el) {
+            const rect = el.getBoundingClientRect();
+            return {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+            };
+        }
+
+        let currentOffsetX = 0;
+        let currentOffsetY = 0;
+        const easing = 0.3;
+        const mouseGlow = document.getElementById('mouseGlow');
+        let particles = [];
+
+        (function createStars() {
+            const starCount = 150;
+            for (let i = 0; i < starCount; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.setProperty('--x', `${Math.random() * 100}px`);
+                star.style.setProperty('--y', `${Math.random() * 100}px`);
+                star.style.left = `${Math.random() * window.innerWidth}px`;
+                star.style.top = `${Math.random() * window.innerHeight}px`;
+                star.style.opacity = `${0.6 + Math.random() * 0.2}`;
+                document.body.appendChild(star);
+            }
+        })();
+
+        (function createFlowLight() {
+            const lightCount = 5;
+            for (let i = 0; i < lightCount; i++) {
+                const light = document.createElement('div');
+                light.className = 'flow-light';
+                light.style.opacity = `${0.3 + Math.random() * 0.2}`;
+                light.style.left = `${Math.random() * window.innerWidth}px`;
+                light.style.top = `${Math.random() * window.innerHeight}px`;
+                light.style.animationDelay = `${Math.random() * 5}s`;
+                document.body.appendChild(light);
+            }
+        })();
+
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.left = `${e.clientX}px`;
+            mouseGlow.style.top = `${e.clientY}px`;
+            mouseGlow.style.opacity = '0.6';
+            mouseGlow.style.transform = 'scale(1)';
+
+            const faceRect = face.getBoundingClientRect();
+            const centerX = faceRect.left + faceRect.width / 2;
+            const centerY = faceRect.top + faceRect.height / 2;
+
+            const dx = e.clientX - centerX;
+            const dy = e.clientY - centerY;
+            const maxOffset = 6;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const targetOffsetX = Math.max(-maxOffset, Math.min(maxOffset, dx / 20));
+            const targetOffsetY = Math.max(-maxOffset, Math.min(maxOffset, dy / 20));
+
+            currentOffsetX += (targetOffsetX - currentOffsetX) * easing;
+            currentOffsetY += (targetOffsetY - currentOffsetY) * easing;
+
+            pupilLeft.style.left = `${9 + currentOffsetX}px`;
+            pupilLeft.style.top = `${9 + currentOffsetY}px`;
+            pupilRight.style.left = `${9 + currentOffsetX}px`;
+            pupilRight.style.top = `${9 + currentOffsetY}px`;
+
+            const range = 200;
+            const likeCenter = getCenter(like);
+            const rejectCenter = getCenter(reject);
+
+            const distToLike = Math.hypot(e.clientX - likeCenter.x, e.clientY - likeCenter.y);
+            const distToReject = Math.hypot(e.clientX - rejectCenter.x, e.clientY - rejectCenter.y);
+
+            let emotion = 0;
+
+            if (distToLike < range) {
+                emotion += (1 - distToLike / range);
+            }
+            if (distToReject < range) {
+                emotion -= (1 - distToReject / range);
+            }
+
+            emotion = Math.max(-1, Math.min(1, emotion));
+
+            if (emotion > 0) {
+                face.style.background = '#ffd966';
+                face.style.boxShadow = `0 0 20px rgba(0, 128, 0, ${emotion * 0.5})`;
+            } else {
+                const hue = 50 + emotion * 50;
+                face.style.background = `hsl(${hue}, 90%, 70%)`;
+                face.style.boxShadow = `0 0 20px rgba(255, 0, 0, ${-emotion * 0.5})`;
+            }
+
+            const curve = 40 * emotion;
+            if (emotion > 0) {
+                mouth.style.height = `${25 + (10 * emotion)}px`;
+                mouth.style.width = `${50 + (10 * emotion)}px`;
+                mouth.style.bottom = `${25 - (5 * emotion)}px`;
+                mouth.style.borderRadius = `0 0 ${60 - (20 * emotion)}px ${60 - (20 * emotion)}px`;
+                mouth.style.transform = `translateX(-50%) translateY(${-curve / 4}px)`;
+            } else {
+                mouth.style.height = `${25 + Math.abs(curve / 2)}px`;
+                mouth.style.width = `${50 - (10 * Math.abs(emotion))}px`;
+                mouth.style.bottom = `${25 - (5 * Math.abs(emotion))}px`;
+                mouth.style.borderRadius = `${60 + curve}px ${60 + curve}px 60px 60px`;
+                mouth.style.transform = `translateX(-50%) translateY(${Math.abs(curve / 4)}px)`;
+            }
+
+            if (emotion > 0) {
+                redl.style.opacity = emotion;
+                redl.style.boxShadow = `0 0 10px rgba(241, 148, 138, ${emotion})`;
+                redr.style.opacity = emotion;
+                redr.style.boxShadow = `0 0 10px rgba(241, 148, 138, ${emotion})`;
+            } else {
+                redl.style.opacity = 0;
+                redl.style.boxShadow = 'none';
+                redr.style.opacity = 0;
+                redr.style.boxShadow = 'none';
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            mouseGlow.style.opacity = '0';
+            mouseGlow.style.transform = 'scale(0.8)';
+        });
+
+        document.addEventListener('click', (e) => {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = `${e.clientX}px`;
+            particle.style.top = `${e.clientY}px`;
+            particle.style.background = `hsl(${Math.random() * 360}, 80%, 70%)`;
+            particle.style.animationDelay = `${Math.random() * 0.5}s`;
+            document.body.appendChild(particle);
+      
+            particles.push(particle);
+      
+            setTimeout(() => {
+                particle.remove();
+                particles = particles.filter(p => p !== particle);
+            }, 1500);
+        });
+    </script>
+
+</body>
+
+</html>
